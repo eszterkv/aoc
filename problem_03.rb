@@ -1,3 +1,11 @@
+# Part 1
+def possible_triangles_in(input)
+  triangles = input.split("\n").map { |line| line.split(" ").map {|num| num.to_i} }
+  triangles.keep_if {|sides| sides.sort[0] + sides.sort[1] > sides.sort[2]}
+  return triangles.length
+end
+
+# Part 2
 def possible_vertical_triangles_in(input)
   nums = input.split(" ").map {|n| n.to_i}
   vertical_triangles = []
