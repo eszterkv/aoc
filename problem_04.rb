@@ -1,11 +1,11 @@
-# Part 1
-
 class Room
-  def initialize(encrypted_name)
-    @checksum = encrypted_name.split('[')[1][0..-2]
-    @secret_string = encrypted_name.split('[')[0].split('-')[0..-2].join.split(//).sort
-    @sector_id = encrypted_name.split('[')[0].split('-')[-1].to_i
+  def initialize(encrypted_string)
+    @checksum = encrypted_string.split('[')[1][0..-2]
+    @encrypted_name = encrypted_string.split('[')[0].split('-')[0..-2].join(' ')
+    @secret_string = encrypted_string.split('[')[0].split('-')[0..-2].join.split(//).sort
+    @sector_id = encrypted_string.split('[')[0].split('-')[-1].to_i
   end
+  attr_reader :sector_id
   def is_real
     char_counts = Hash.new
     @secret_string.each do |ch|
@@ -21,21 +21,23 @@ class Room
     end
     return top.flatten[0..4].join == @checksum
   end
-  attr_reader :sector_id
+  def decipher
+    alphabet = 'abcdefghijklmnopqrstuvwxyz'
+    return @encrypted_name.split(//).map{|ch| ch == ' ' ? ' ' : alphabet[(@sector_id + alphabet.index(ch.downcase)) % alphabet.length]}.join
+  end
 end
 
-def sum_real_rooms(input)
+def sum_real_rooms_and_find_north_pole_stuff(input)
   encrypted_names = input.split("\n")
   sum = 0
   encrypted_names.each do |string|
     room = Room.new(string)
     if room.is_real
       sum += room.sector_id
+      if room.decipher.index('north') != nil
+        puts room.decipher, room.sector_id
+      end
     end
   end
   return sum
 end
-
-
-# Part 2
-
