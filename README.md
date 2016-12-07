@@ -1,2 +1,2 @@
 #### adventofcode
-my solutions to [advent of code 2016](http://adventofcode.com/), mostly in ruby.
+my solutions to [advent of code 2016](http://adventofcode.com/) in ruby.
