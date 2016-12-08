@@ -3,7 +3,7 @@ def count_lit_pixels(input)
   h = 6
   w = 50
   for row in 0..h-1
-    screen << "."*w
+    screen << "." * w
   end
   
   input.split("\n").each do |instruction|
