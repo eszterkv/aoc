@@ -25,3 +25,28 @@ def decompress_length(input)
 end
 
 puts decompress_length(input)
+
+
+def decompress_v2(input)
+  pattern = /\([0-9]+[x][0-9]+\)/
+  input = input.split("\n").join.split(" ").join
+  counter = 0
+  while input.length > 0
+    marker = input.match(pattern).to_s
+    chunk = marker.length > 0 ? (input.index(marker) == 0 ? marker : input[0..input.index(marker)-1]) : input
+    is_marker = !!chunk.match(pattern)
+    if is_marker
+      seq_length = marker.split("x")[0][1..-1].to_i
+      repetitions = marker.split("x")[1].to_i
+      marked_length = decompress_v2(input[chunk.length..(chunk.length + seq_length - 1)])
+      input = input[(chunk.length + seq_length)..-1]
+      counter += marked_length * repetitions
+    else
+      input = input[chunk.length..-1]
+      counter += chunk.length
+    end
+  end
+  return counter
+end
+
+puts decompress_v2(input)
