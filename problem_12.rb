@@ -35,27 +35,55 @@ dec c
 jnz c -5"
 
 def decode(input)
-  variables = Hash.new
+  $a = 0
+  $b = 0
+  $c = 0
+  $d = 0
   lines = input.split("\n")
   i = 0
   while i < lines.length-1
     msg = lines[i].split(" ")
     case msg[0]
     when "cpy"
-      variables[msg[2]] = variables.has_key?(msg[1]) ? variables[msg[1]] : msg[1].to_i
-      i += 1
-    when "inc"
-      variables[msg[1]] += 1
-      i += 1
-    when "dec"
-      variables[msg[1]] -= 1
-      i += 1
+      case msg[2]
+      when "a"
+        $a = msg[1].to_i
+      when "b"
+        $b = msg[1].to_i
+      when "c"
+        $c = msg[1].to_i
+      when "d"
+        $d = msg[1].to_i
+      end
+    when "inc", "dec"
+      x = msg[0] == "inc" ? 1 : -1
+      case msg[1]
+      when "a"
+        $a+= x
+      when "b"
+        $b += x
+      when "c"
+        $c += x
+      when "d"
+        $d += x
+      end
     when "jnz"
-      i += (variables[msg[1]] != 0 and variables.has_key?(msg[1])) ? msg[2].to_i : 1
+      i += var_from(msg[1]) == 0 ? 0 : msg[2].to_i
     end
-    puts "#{msg.join(" ")} --> #{variables}, next i = #{i}"
+    i += 1
   end
-  return variables.to_s
+  return $a
 end
 
-puts decode(input)
+def var_from(string)
+  case string
+  when "a"
+    return $a
+  when "b"
+    return $b
+  when "c"
+    return $c
+  when "d"
+    return $d
+  end
+end
