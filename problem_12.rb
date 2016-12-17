@@ -1,15 +1,3 @@
-# cpy x y / y = x
-# inc x / x += 1
-# dec x / x -= 1
-# jnz x y / if x != 0: jump y instructions further
-
-test = "cpy 41 a
-inc a
-inc a
-dec a
-jnz a 2
-dec a"
-
 input = "cpy 1 a
 cpy 1 b
 cpy 26 d
@@ -41,25 +29,26 @@ def decode(input)
   $d = 0
   lines = input.split("\n")
   i = 0
-  while i < lines.length-1
+  while i < lines.length
     msg = lines[i].split(" ")
     case msg[0]
     when "cpy"
+      new_val = var_from(msg[1]) ? var_from(msg[1]) : msg[1].to_i
       case msg[2]
       when "a"
-        $a = msg[1].to_i
+        $a = new_val
       when "b"
-        $b = msg[1].to_i
+        $b = new_val
       when "c"
-        $c = msg[1].to_i
+        $c = new_val
       when "d"
-        $d = msg[1].to_i
+        $d = new_val
       end
     when "inc", "dec"
-      x = msg[0] == "inc" ? 1 : -1
+      x = (msg[0] == "inc") ? 1 : -1
       case msg[1]
       when "a"
-        $a+= x
+        $a += x
       when "b"
         $b += x
       when "c"
@@ -68,7 +57,7 @@ def decode(input)
         $d += x
       end
     when "jnz"
-      i += var_from(msg[1]) == 0 ? 0 : msg[2].to_i
+      i += (var_from(msg[1]) == 0) ? 0 : msg[2].to_i-1
     end
     i += 1
   end
@@ -86,4 +75,7 @@ def var_from(string)
   when "d"
     return $d
   end
+  return false
 end
+
+puts decode(input)
