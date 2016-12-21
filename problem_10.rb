@@ -26,37 +26,6 @@ class Bot
 
   def dispatch_chips
     @rules.each do |chip, dest|
-      if dest.kind_of?(Bot)
-        dest.add_chip(chip == "low" ? @microchips.min : @microchips.max)
-      end
-class Bot
-  def initialize(id)
-    @id = id
-    @microchips = []
-    @rules = Hash.new
-  end
-
-  def add_chip(value)
-    @microchips << value
-    if @microchips.count > 1
-      self.check_if_wins
-      self.dispatch_chips
-    end
-  end
-
-  def check_if_wins
-    if @microchips.sort == $values
-      $winner = @id
-    end
-  end
-
-  def assign_chips(low, high)
-    @rules["low"] = low
-    @rules["high"] = high
-  end
-
-  def dispatch_chips
-    @rules.each do |chip, dest|
       dest.add_chip(chip == "low" ? @microchips.min : @microchips.max)
       @microchips.delete(chip)
     end
