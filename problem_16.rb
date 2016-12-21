@@ -19,3 +19,5 @@ def checksum_of(data)
 end
 
 puts solve('01111001100111011', 272)
+
+# works for part 1 only, part 2 is too slow
