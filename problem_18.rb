@@ -1,27 +1,19 @@
-class Tile
-  def initialize(pos)
-    @left = ( (pos[1] == 0) ? "." : $tiles[pos[0]-1][pos[1]-1] )
-    @center = $tiles[pos[0]-1][pos[1]]
-    @right = ( (pos[1] == $last_idx) ? "." : $tiles[pos[0]-1][pos[1]+1] )
-  end
-  def get_str
-    return ( ["^^.", ".^^", "^..", "..^"].include?(@left + @center + @right) ? "^" : "." )
-  end
-end
-
 def solve(input, lines)
-  $tiles = [input]
+  count = input.count(".")
+  $prev_line = input
   $last_idx = input.length-1
-  while $tiles.length < lines
+  (lines-1).times do
     line = ""
     for tile in 0..input.length-1
-      line += Tile.new([$tiles.length, tile]).get_str
+      line += ( ["^^.", ".^^", "^..", "..^"].include?(( (tile == 0) ? "." : $prev_line[tile-1] ) + $prev_line[tile] + ( (tile == $last_idx) ? "." : $prev_line[tile+1] )) ? "^" : "." )
     end
-    $tiles << line
+    count += line.count(".")
+    $prev_line = line
   end
-  return $tiles.join.count(".")
+  return count
 end
 
 input = ".^.^..^......^^^^^...^^^...^...^....^^.^...^.^^^^....^...^^.^^^...^^^^.^^.^.^^..^.^^^..^^^^^^.^^^..^"
 
 puts solve(input, 40)
+puts solve(input, 400000)
