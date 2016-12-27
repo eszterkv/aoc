@@ -5,7 +5,10 @@ def solve(input, lines)
   (lines-1).times do
     line = ""
     for tile in 0..input.length-1
-      line += ( ["^^.", ".^^", "^..", "..^"].include?(( (tile == 0) ? "." : $prev_line[tile-1] ) + $prev_line[tile] + ( (tile == $last_idx) ? "." : $prev_line[tile+1] )) ? "^" : "." )
+      left = (tile == 0) ? "." : $prev_line[tile-1]
+      center = $prev_line[tile]
+      right = (tile == $last_idx) ? "." : $prev_line[tile+1]
+      line += ["^^.", ".^^", "^..", "..^"].include?(left + center + right) ? "^" : "."
     end
     count += line.count(".")
     $prev_line = line
