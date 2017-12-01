@@ -1,19 +1,18 @@
 function sum_digits(input) {
   digits = String(input).split('').map((d) => parseInt(d));
-  return digits.map((digit, idx) => {
-    const next = idx < digits.length - 1 ? digits[idx + 1] : digits[0];
-    return digit === next && digit;
+  return digits.map((d, idx) => {
+    return d === (idx < digits.length - 1 ? digits[idx + 1] : digits[0]) && d;
   }).reduce((sum, digit) => sum + digit);
 }
 
 function sum_digits_part_2(input) {
   digits = String(input).split('').map((d) => parseInt(d));
-  return digits.map((digit, idx) => {
-    const halfway = digits.length / 2;
-    const next = idx + halfway < digits.length - 1
-      ? digits[idx + halfway]
-      : digits[(idx + halfway) % digits.length];
-    return digit === next && digit;
+  return digits.map((d, idx) => {
+    const offset = digits.length / 2;
+    const next = idx + offset < digits.length - 1
+      ? digits[idx + offset]
+      : digits[(idx + offset) % digits.length];
+    return d === next && d;
   }).reduce((sum, digit) => sum + digit);
 }
 
