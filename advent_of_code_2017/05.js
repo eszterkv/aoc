@@ -12,7 +12,16 @@ function jump(input) {
 }
 
 function jump_part_2(input) {
-  // part 2 goes here
+  let step_list = input.split('\n').map((step) => parseInt(step));
+  let idx = 0;
+  let step_count = 0;
+  while (idx < step_list.length) {
+    const prev_idx = idx;
+    idx += step_list[prev_idx];
+    step_list[prev_idx] += (step_list[prev_idx] >= 3 ? -1 : 1);
+    step_count++;
+  }
+  return step_count;
 }
 
 function run_tests(fn, test_suite) {
@@ -35,11 +44,15 @@ const test_suite_1 = [
 ];
 
 const test_suite_2 = [
-  {input: true, expected: true},
+  {input: `0
+3
+0
+1
+-3`, expected: 10},
 ];
 
 run_tests(jump, test_suite_1);
-// run_tests(challenge_part_2, test_suite_2)
+run_tests(jump_part_2, test_suite_2)
 
 const input = `0
 0
@@ -1135,4 +1148,4 @@ const input = `0
 -506`;
 
 console.log(`Part 1: ${jump(input)}`);
-// console.log(`Part 2: ${jump_part_2(input)}`);
+console.log(`Part 2: ${jump_part_2(input)}`);
