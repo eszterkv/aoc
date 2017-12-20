@@ -1,7 +1,7 @@
 const fs = require('fs');
 const test = require('./test');
 
-fs.readFile('./06.input', 'utf8', (err, data) => {
+fs.readFile('./inputs/06.input', 'utf8', (err, data) => {
   if (err) throw err;
   const input = data.trim();
   console.log(`Part 1 & 2: ${distributeBlocks(input)}`);

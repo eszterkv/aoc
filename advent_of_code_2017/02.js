@@ -1,7 +1,7 @@
 const fs = require('fs');
 const test = require('./test');
 
-fs.readFile('./02.input', 'utf8', (err, data) => {
+fs.readFile('./inputs/02.input', 'utf8', (err, data) => {
   if (err) throw err;
   const input = data.trim();
   console.log(`Part 1: ${getChecksum(input)}`);
