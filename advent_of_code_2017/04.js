@@ -1,5 +1,9 @@
 const fs = require('fs');
-const test = require('./test');
+const runTest = require('./test');
+const tests = require('./tests/04.test');
+
+runTest(validateNoDuplicates, tests.noDuplicates);
+runTest(validateNoAnagrams, tests.noAnagrams);
 
 fs.readFile('./inputs/04.input', 'utf8', (err, data) => {
   if (err) throw err;
@@ -22,20 +26,3 @@ function validateNoAnagrams(passphrase) {
   return words.length === words.map((word) => word.split('').sort().join(''))
                                .filter((word, idx, arr) => idx === arr.indexOf(word)).length;
 }
-
-const testSuiteNoDuplicates = [
-  {input: 'aa bb cc dd ee', expected: true},
-  {input: 'aa bb cc dd aa', expected: false},
-  {input: 'aa bb cc dd aaa', expected: true},
-];
-
-const testSuiteNoAnagrams = [
-  {input: 'abcde fghij', expected: true},
-  {input: 'abcde xyz ecdab', expected: false},
-  {input: 'a ab abc abd abf abj', expected: true},
-  {input: 'iiii oiii ooii oooi oooo', expected: true},
-  {input: 'oiii ioii iioi iiio', expected: false},
-];
-
-test(validateNoDuplicates, testSuiteNoDuplicates);
-test(validateNoAnagrams, testSuiteNoAnagrams);

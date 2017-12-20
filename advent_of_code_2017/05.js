@@ -1,5 +1,9 @@
 const fs = require('fs');
-const test = require('./test');
+const runTest = require('./test');
+const tests = require('./tests/05.test');
+
+runTest(jump, tests.suite1);
+runTest(jumpPart2, tests.suite2);
 
 fs.readFile('./inputs/05.input', 'utf8', (err, data) => {
   if (err) throw err;
@@ -33,22 +37,3 @@ function jumpPart2(input) {
   }
   return stepCount;
 }
-
-const testSuite1 = [
-  {input: `0
-3
-0
-1
--3`, expected: 5},
-];
-
-const testSuite2 = [
-  {input: `0
-3
-0
-1
--3`, expected: 10},
-];
-
-test(jump, testSuite1);
-test(jumpPart2, testSuite2)

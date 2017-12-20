@@ -1,5 +1,9 @@
 const fs = require('fs');
-const test = require('./test');
+const runTest = require('./test');
+const tests = require('./tests/01.test');
+
+runTest(sumDigits, tests.suite1);
+runTest(sumDigitsPt2, tests.suite2);
 
 fs.readFile('./inputs/01.input', 'utf8', (err, data) => {
   if (err) throw err;
@@ -25,21 +29,3 @@ function sumDigitsPt2(input) {
     return d === next && d;
   }).reduce((sum, digit) => sum + digit);
 }
-
-const testSuite1 = [
-  {input: 1122, expected: 3},
-  {input: 1111, expected: 4},
-  {input: 1234, expected: 0},
-  {input: 91212129, expected: 9},
-];
-
-const testSuite2 = [
-  {input: 1212, expected: 6},
-  {input: 1221, expected: 0},
-  {input: 123425, expected: 4},
-  {input: 123123, expected: 12},
-  {input: 12131415, expected: 4},
-]
-
-test(sumDigits, testSuite1);
-test(sumDigitsPt2, testSuite2);

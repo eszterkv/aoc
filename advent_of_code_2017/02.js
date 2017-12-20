@@ -1,5 +1,9 @@
 const fs = require('fs');
-const test = require('./test');
+const runTest = require('./test');
+const tests = require('./tests/02.test');
+
+runTest(getChecksum, tests.suite1);
+runTest(getChecksumPart2, tests.suite2);
 
 fs.readFile('./inputs/02.input', 'utf8', (err, data) => {
   if (err) throw err;
@@ -34,18 +38,3 @@ function getChecksumPart2(input) {
               })
               .reduce((sum, row) => sum + row);
 }
-
-const testSuite1 = [
-  {input: `5 1 9 5
-7 5 3
-2 4 6 8`.replace(/( )/g, '\t'), expected: 18},
-];
-
-const testSuite2 = [
-  {input: `5 9 2 8
-9 4 7 3
-3 8 6 5`.replace(/()/g, '\t'), expected: 9}
-];
-
-test(getChecksum, testSuite1);
-test(getChecksumPart2, testSuite2);

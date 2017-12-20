@@ -1,5 +1,9 @@
 const fs = require('fs');
-const test = require('./test');
+const runTest = require('./test');
+const tests = require('./tests/03.test');
+
+runTest(spiralMemory, tests.suite1);
+runTest(spiralMemoryPt2, tests.suite2);
 
 fs.readFile('./inputs/03.input', 'utf8', (err, data) => {
   if (err) throw err;
@@ -68,18 +72,3 @@ function spiralMemoryPt2(input) {
   }
   return lastSquare;
 }
-
-const testSuite1 = [
-  {input: 1, expected: 0},
-  {input: 12, expected: 3},
-  {input: 23, expected: 2},
-  {input: 1024, expected: 31},
-];
-
-const testSuite2 = [
-  {input: 12, expected: 23},
-  {input: 747, expected: 806},
-];
-
-test(spiralMemory, testSuite1)
-test(spiralMemoryPt2, testSuite2)

@@ -1,5 +1,8 @@
 const fs = require('fs');
-const test = require('./test');
+const runTest = require('./test');
+const tests = require('./tests/06.test');
+
+runTest(distributeBlocks, tests.suite1);
 
 fs.readFile('./inputs/06.input', 'utf8', (err, data) => {
   if (err) throw err;
@@ -24,9 +27,3 @@ function distributeBlocks(input) {
     snapshots.push(String(banks));
   }
 }
-
-const testSuite = [
-  {input: `0 2 7 0`.replace(/( )/g, '\t'), expected: 5},
-];
-
-test(distributeBlocks, testSuite);
