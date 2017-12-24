@@ -6,7 +6,8 @@ function test(fn, testSuite) {
       console.log(`Error with input ${testCase.input}: expected ${testCase.expected}, got ${actual}`);
     return actual === testCase.expected;
   });
-  console.log(`Done with ${testResults.filter((r) => !r).length} errors.\n`)
+  const errorCount = testResults.filter((r) => !r).length;
+  console.log(`Done with ${errorCount} error${errorCount == 1 ? '' : 's'}.\n`)
 }
 
 module.exports = test;
