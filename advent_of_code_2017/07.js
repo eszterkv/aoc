@@ -43,6 +43,7 @@ function findRootProgramPart2(input) {
                         .map((line) => new Program(line));
   programs.forEach((p) => p.calculateTowerWeight(programs));
   const root = programs.find((p) => p.name === findRootProgram(input));
+  console.log('First solution is THE solution. Ignore the 2nd.');
   return(isBalanced(programs, root));
 }
 
