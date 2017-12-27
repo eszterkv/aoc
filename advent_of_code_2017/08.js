@@ -16,17 +16,16 @@ class Register {
 }
 
 runTest(findLargestValue, tests.suite1);
-// runTest(findRootProgramPart2, tests.suite2);
 
 fs.readFile('./inputs/08.input', 'utf8', (err, data) => {
   if (err) throw err;
   const input = data.trim();
-  console.log(`Part 1: ${findLargestValue(input)}`);
-  // console.log(`Part 2: ${findLargestValuePt2(input)}`);
+  console.log(`Part 1 & 2: ${findLargestValue(input)}`);
 });
 
 function findLargestValue(input) {
   let registers = [];
+  let highestValueHeld = 0;
   input.split('\n').map((instruction) => {
     const name = instruction.split(' ')[0];
     const register = registers.find((r) => r.name === name) || new Register(name);
@@ -52,9 +51,13 @@ function findLargestValue(input) {
       const direction = instruction.split(' ')[1];
       const value = parseInt(instruction.split(' ')[2]);
       register.addValue(direction, value);
+      if (register.value > highestValueHeld) {
+        highestValueHeld = register.value;
+      }
     }
   });
   
+  console.log('Highest value held:', highestValueHeld);
   return registers.find((r) => {
     return r.value == Math.max.apply(null, registers.map((r) => r.value));
   }).value;

@@ -5,8 +5,4 @@ a inc 1 if b < 5
 c dec -10 if a >= 1
 c inc -20 if c == 10`, expected: 1},
   ],
-
-  suite2: [
-    {input: ``, expected: 0},
-  ],
 };
