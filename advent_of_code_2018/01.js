@@ -30,4 +30,3 @@ function solve2(input) {
     };
   }
 }
-
