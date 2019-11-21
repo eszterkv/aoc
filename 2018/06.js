@@ -13,38 +13,59 @@ fs.readFile('./inputs/06.input', 'utf8', (err, data) => {
 });
 
 /* get list of coords
- * find the coord that gives you the largest distance from others?
  * determine the area around each point
  *   by counting the locations that are closest to that coord (no ties!)
  * what is the SIZE of largest area that isn't infinite?
  */
 
 function solve(input) {
-  /*
-   * 1, 1
-     1, 6
-     8, 3
-     3, 4
-     5, 5
-     8, 9
-  */
   const coords = parseCoords(input);
   const startX = coords.reduce((start, curr) => Math.min(start, curr[0]), Infinity),
         startY = coords.reduce((start, curr) => Math.min(start, curr[1]), Infinity),
         w = coords.reduce((size, curr) => Math.max(size, curr[0]), -Infinity),
         h = coords.reduce((size, curr) => Math.max(size, curr[1]), -Infinity);
 
-  console.log(
-    'coords:', coords,
-    '\nstart X and Y:', startX, startY,
-    '\nw, h:', w, h,
-  );
-
   const matrix = buildMatrix(coords, startX, startY, w, h);
   printMatrix(matrix);
 
   const validPoints = pointsWithFiniteArea(coords, matrix, startX, startY, w, h);
-  console.log(validPoints);
+
+  const point = validPoints[0];
+
+  coords.forEach(other => {
+    if (point === other)
+      return;
+
+    const distance = manhattanDistance(point, other);
+    const sx = Math.min(point[0], other[0]),
+          sy = Math.min(point[1], other[1]),
+          endx = Math.max(point[0], other[0]),
+          endy = Math.max(point[1], other[1]);
+
+    for (let i = sx; i < endx + 1; i++) {
+      for (let j = sy; j < endy + 1; j++) {
+        const mdPoint = manhattanDistance(point, [i, j]);
+        const mdOther = manhattanDistance(other, [i, j]);
+        let value;
+        if (mdPoint < mdOther)
+          value = coords.indexOf(point);
+        else if (mdPoint > mdOther)
+          value = coords.indexOf(other);
+        else
+          value = '.';
+        matrix[j-startY][i-startX] = value;
+      }
+    }
+  });
+
+  printMatrix(matrix);
+}
+
+function manhattanDistance(a, b) {
+  return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]);
+}
+
+function claimedArea(point, other) {
 }
 
 function parseCoords(input) {
