@@ -28,7 +28,7 @@ function solve(input) {
         }))
         .sort((a, b) => a.dist - b.dist);
 
-      const closest = distances[0].dist === distances[1].dist ? null : distances[0]
+      const closest = distances[0].dist === distances[1].dist ? null : distances[0];
       if (closest) {
         matrix[x][y] = closest.value;
       }
