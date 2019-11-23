@@ -26,39 +26,38 @@ function solve(input) {
         h = coords.reduce((size, curr) => Math.max(size, curr[1]), -Infinity);
 
   const matrix = buildMatrix(coords, startX, startY, w, h);
-  printMatrix(matrix);
 
-  const validPoints = pointsWithFiniteArea(coords, matrix, startX, startY, w, h);
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      if (matrix[x][y] !== '.')
+        continue;
 
-  const point = validPoints[0];
+      const distances = coords
+        .map(point => ({
+          point,
+          dist: manhattanDistance([y + startY, x + startX], point),
+          value: matrix[point[1] - startX][point[0] - startY],
+        }))
+        .sort((a, b) => a.dist - b.dist);
 
-  coords.forEach(other => {
-    if (point === other)
-      return;
-
-    const distance = manhattanDistance(point, other);
-    const sx = Math.min(point[0], other[0]),
-          sy = Math.min(point[1], other[1]),
-          endx = Math.max(point[0], other[0]),
-          endy = Math.max(point[1], other[1]);
-
-    for (let i = sx; i < endx + 1; i++) {
-      for (let j = sy; j < endy + 1; j++) {
-        const mdPoint = manhattanDistance(point, [i, j]);
-        const mdOther = manhattanDistance(other, [i, j]);
-        let value;
-        if (mdPoint < mdOther)
-          value = coords.indexOf(point);
-        else if (mdPoint > mdOther)
-          value = coords.indexOf(other);
-        else
-          value = '.';
-        matrix[j-startY][i-startX] = value;
+      const closest = distances[0].dist === distances[1].dist ? null : distances[0]
+      if (closest) {
+        matrix[x][y] = closest.value;
       }
     }
+  }
+
+  const flatMatrix = matrix.reduce((flat, arr) => [...flat, ...arr], []).sort();
+  const validPoints = pointsWithFiniteArea(coords, matrix, startX, startY, w, h);
+  const validValues = validPoints.map(point => point.val);
+  const counts = {};
+  flatMatrix.forEach(val => {
+    if (counts[val] || !validValues.includes(val)) return;
+
+    counts[val] = flatMatrix.lastIndexOf(val) - flatMatrix.indexOf(val) + 1;
   });
 
-  printMatrix(matrix);
+  return Math.max(...Object.values(counts));
 }
 
 function manhattanDistance(a, b) {
@@ -87,12 +86,14 @@ function buildMatrix(coords, startX, startY, w, h) {
 }
 
 function pointsWithFiniteArea(points, matrix, startX, startY, w, h) {
-  return points.filter(point =>
-    point[0] - startX > 0 &&
-    point[0] - startX < w - 1 &&
-    point[1] - startY > 0 &&
-    point[1] - startY < h - 1
-  );
+  return points
+    .filter(point =>
+      point[0] - startX > 0 &&
+      point[0] - startX < w - 1 &&
+      point[1] - startY > 0 &&
+      point[1] - startY < h - 1
+    )
+    .map(point => ({ point, val: matrix[point[1] - startY][point[0] - startX] }))
 }
 
 function printMatrix(matrix) {
