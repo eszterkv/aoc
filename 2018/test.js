@@ -1,6 +1,6 @@
-function test(fn, testSuite) {
+function test(fn, testSuite,  ...rest) {
   const testResults = testSuite.map((testCase) => {
-    const actual = fn(testCase.input);
+    const actual = fn(testCase.input, ...rest);
     if (actual !== testCase.expected)
       console.log(`Error with input ${testCase.input}: expected ${testCase.expected}, got ${actual}`);
     return actual === testCase.expected;

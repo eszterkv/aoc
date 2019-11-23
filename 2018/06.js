@@ -3,13 +3,13 @@ const runTest = require('./test');
 const tests = require('./tests/06.test');
 
 runTest(solve, tests.suite1);
-//runTest(solve2, tests.suite2);
+runTest(solve2, tests.suite2, 32);
 
 fs.readFile('./inputs/06.input', 'utf8', (err, data) => {
   if (err) throw err;
   const input = data.trim();
   console.log(`Part 1: ${solve(input)}`);
-//  console.log(`Part 2: ${solve2(input)}`);
+  console.log(`Part 2: ${solve2(input)}`);
 });
 
 function solve(input) {
@@ -46,6 +46,26 @@ function solve(input) {
   });
 
   return Math.max(...Object.values(counts));
+}
+
+function solve2(input, limit = 10000) {
+  const { coords, matrix, startX, startY, w, h } = parseCoords(input);
+
+  let size = 0;
+
+  for (let x = 0; x < h; x++) {
+    for (let y = 0; y < w; y++) {
+      const sumOfDistances = coords
+        .reduce(
+          (sum, point) => sum + manhattanDistance([x + startX, y + startY], point),
+          0,
+        );
+
+      if (sumOfDistances < limit) size++;
+    }
+  }
+
+  return size;
 }
 
 function manhattanDistance(a, b) {
