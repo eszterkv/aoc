@@ -15,8 +15,8 @@ fs.readFile('./inputs/06.input', 'utf8', (err, data) => {
 function solve(input) {
   const { coords, matrix, startX, startY, w, h } = parseCoords(input);
 
-  for (let y = 0; y < h; y++) {
-    for (let x = 0; x < w; x++) {
+  for (let x = 0; x < h; x++) {
+    for (let y = 0; y < w; y++) {
       if (matrix[x][y] !== '.')
         continue;
 
@@ -37,10 +37,11 @@ function solve(input) {
   }
 
   const flatMatrix = matrix.reduce((flat, arr) => [...flat, ...arr], []).sort();
-  const validValues = valuesWithFiniteArea(coords, matrix, startX, startY, w, h);
+  const uniqValues = [...new Set(flatMatrix)];
+  const validValues = valuesWithFiniteArea(uniqValues, matrix);
   const counts = {};
-  flatMatrix.forEach(val => {
-    if (counts[val] || !validValues.includes(val)) return;
+  uniqValues.forEach(val => {
+    if (!validValues.includes(val)) return;
 
     counts[val] = flatMatrix.lastIndexOf(val) - flatMatrix.indexOf(val) + 1;
   });
@@ -63,8 +64,8 @@ function parseCoords(input) {
 
   const startX = coords.reduce((start, curr) => Math.min(start, curr[0]), Infinity);
   const startY = coords.reduce((start, curr) => Math.min(start, curr[1]), Infinity);
-  const w = coords.reduce((size, curr) => Math.max(size, curr[0] - startX), -Infinity) + 1;
-  const h = coords.reduce((size, curr) => Math.max(size, curr[1] - startY), -Infinity) + 1;
+  const w = coords.reduce((size, curr) => Math.max(size, curr[1] - startY), -Infinity) + 1;
+  const h = coords.reduce((size, curr) => Math.max(size, curr[0] - startX), -Infinity) + 1;
 
   const matrix = [];
   let row = Array(w).fill('.');
@@ -73,19 +74,22 @@ function parseCoords(input) {
     row = row.slice(0);
   }
   coords.forEach((point, idx) => {
-    matrix[point[1] - startY][point[0] - startX] = idx.toString();
+    matrix[point[0] - startX][point[1] - startY] = idx.toString();
   });
 
   return { coords, matrix, startX, startY, w, h };
 }
 
-function valuesWithFiniteArea(points, matrix, startX, startY, w, h) {
-  return points
-    .filter(point =>
-      point[0] - startX > 0 &&
-      point[0] - startX < w - 1 &&
-      point[1] - startY > 0 &&
-      point[1] - startY < h - 1
-    )
-    .map(point => matrix[point[1] - startY][point[0] - startX]);
+function valuesWithFiniteArea(values, matrix) {
+  const edges = [
+    matrix[0],
+    matrix.map(row => row[0]),
+    matrix.map(row => row[row.length - 1]),
+    matrix[matrix.length - 1],
+  ];
+
+  return values
+    .filter(value =>
+      !edges.some(edge => edge.includes(value))
+    );
 }
