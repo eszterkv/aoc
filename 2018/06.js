@@ -21,12 +21,11 @@ function solve(input) {
         continue;
 
       const distances = coords
-        .map(point => {
-          return ({
+        .map(point => ({
           point,
           dist: manhattanDistance([x + startX, y + startY], point),
           value: matrix[point[0] - startX][point[1] - startY],
-        })})
+        }))
         .sort((a, b) => a.dist - b.dist);
 
       const closest = distances[0].dist === distances[1].dist ? null : distances[0]
