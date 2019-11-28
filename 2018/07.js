@@ -13,74 +13,44 @@ fs.readFile('./inputs/07.input', 'utf8', (err, data) => {
 });
 
 function solve(input) {
-  const steps = input.split('\n').map(line => ({req: line.split(' ')[1], step: line.split(' ')[7]}));
-  let sequences = [];
-  steps.forEach(s => {
-    let found = false;
-    if (sequences.length === 0) {
-      sequences.push(s.req + s.step);
-    } else {
-      sequences.forEach((seq, idx) => {
-        if (seq[seq.length - 1] === s.req) {
-          sequences[idx] = seq + s.step;
-          found = true;
-        }
-        if (seq[0] === s.step) {
-          sequences[idx] = s.req + seq;
-          found = true;
-        }
-      });
-      if (!found) {
-        sequences.push(s.req + s.step);
-      }
-    }
-  });
-  steps.forEach(s => {
-    sequences.forEach((seq, idx) => {
-      if (seq[seq.length - 1] === s.req) {
-        sequences[idx] = seq + s.step;
-      }
-      if (seq[0] === s.step) {
-        sequences[idx] = s.req + seq;
-      }
-    });
-  });
+  const instructions = input
+    .split('\n')
+    .map(instruction => instruction.match(/(?<= )(\w)(?= )/g))
+    .sort((a, b) => a[1].localeCompare(b[1]));
 
-  sequences = sequences.sort();
-  console.log(sequences);
-  /*
-  let solution = sequences[0];
-  for (let i = 1; i < sequences.length; i++) {
-    const s = sequences[i];
-    console.log('trying to add', s, 'to', solution);
-    for (let j = 0; j < s.length; j++) {
-      if (solution.indexOf(s[j]) === -1 && solution.indexOf(s[j-1]) > -1) {
-        findNextCommonIdx(solution, s, j, -1);
-        const from = findNextCommonIdx(solution, s, s[j], -1),
-              to = findNextCommonIdx(solution, s, s[j], 1);
-        console.warn('finding a place for', s[j], 'between', from, to);
-        let inserted = false;
-        for (let k = from; k < to; k++) {
-          if (s[j] < solution[k]) {
-            console.log(s[j], '<', solution[k]);
-            solution = solution.substring(0, k) + s[j] + solution.substring(k);
-            inserted = true;
-            break;
-          };
-        }
-        if (!inserted) {
-          solution = solution.substring(0, to) + s[j] + solution.substring(to);
-        }
-        console.log('-->', solution);
-      };
-    }
-  };
-  return solution;*/
-}
-
-function findNextCommonIdx(a, b, bIdx, direction) {
-  if (direction === -1) {
+  const graph = new Map();
+  for (const i of instructions) {
+    const [dependency, step] = i;
+    if (graph.has(step))
+      graph.set(step, new Set([...graph.get(step), dependency]));
+    else
+      graph.set(step, new Set(dependency));
   }
+
+  const allSteps = [...new Set(instructions.reduce((all, curr) => [...all, ...curr], []))];
+  allSteps.sort().forEach(step => {
+    if (!graph.has(step))
+      graph.set(step, new Set());
+  });
+
+  let sequence = '';
+
+  while (graph.size > 0) {
+    const availableSteps = Array.from(graph.entries())
+      .filter(([step, deps]) => deps.size === 0)
+      .sort((a, b) => a[0].localeCompare(b[0]));
+
+    const nextStep = availableSteps[0];
+      const [step, deps] = availableSteps[0];
+        sequence += step;
+        graph.delete(step);
+
+        for (const otherStep of graph.keys())
+          if (graph.get(otherStep).has(step))
+            graph.get(otherStep).delete(step);
+  }
+
+  return sequence;
 }
 
 function solve2(input) {

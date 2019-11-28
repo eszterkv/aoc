@@ -10,6 +10,5 @@ Step F must be finished before step E can begin.`, expected: 'CABDFE'},
   ],
 
   suite2: [
-    {input: `dabAcCaCBAcCcaDA`, expected: 4},
   ],
 };
