@@ -7,6 +7,8 @@ module.exports = {
   ],
 
   suite2: [
-    {input: ``, expected: ''},
+    {input: `14
+1969
+100756`, expected: 2 + 966 + 50346},
   ],
 };
