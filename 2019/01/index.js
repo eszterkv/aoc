@@ -11,12 +11,12 @@ if (!testing)
 
 function part1(input) {
   return input.split('\n')
-    .reduce((total, module) => total + calculateFuelRequired(module), 0);
+    .reduce((total, part) => total + calculateFuelRequired(part), 0);
 }
 
 function part2(input) {
   return input.split('\n')
-    .reduce((total, module) => total + calculateRecursiveRequired(module), 0);
+    .reduce((total, part) => total + calculateRecursiveRequired(part), 0);
 }
 
 function calculateFuelRequired(mass) {
