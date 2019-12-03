@@ -38,12 +38,9 @@ function part2(input) {
 
 function handleOp(code) {
   if (code === 1)
-    return add;
+    return (a, b) => a + b;
   else if (code === 2)
-    return multiply;
+    return (a, b) => a * b;
 }
-
-const add = (a, b) => a + b;
-const multiply = (a, b) => a * b;
 
 module.exports = { part1, part2 };
