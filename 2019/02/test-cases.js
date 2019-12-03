@@ -15,10 +15,5 @@ module.exports = {
     },
   ],
 
-  suite2: [
-    {
-      input: ``,
-      expected: undefined,
-    },
-  ],
+  suite2: [],
 };
