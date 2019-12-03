@@ -18,11 +18,11 @@ function part1(input) {
 
   let idx = 0;
   while (true) {
-    if (nums[idx] === 99) return nums[0];
+    const opcode = nums[idx];
+    if (opcode === 99) return nums[0];
 
-    const val = handleOp(nums[idx])(nums[nums[idx + 1]], nums[nums[idx + 2]]);
-    const target = nums[idx + 3];
-    nums[target] = val;
+    const [a, b, target] = [nums[idx + 1], nums[idx + 2], nums[idx + 3]];
+    nums[target] = handleOp(opcode)(nums[a], nums[b]);
     idx += 4;
   }
 }
