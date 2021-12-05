@@ -5,8 +5,13 @@ if (!problem) {
   return
 }
 
-const solver = require(`./${problem}/index.js`)
+const { part1, part2 } = require(`./${problem}/index.js`)
 const input = require('fs').readFileSync(`./${problem}/input.txt`, 'utf8')
-const solution = solver(input)
+const solutionPart1 = part1(input)
+const solutionPart2 = part2(input)
 
-console.log(`The solution for ${problem} is: ${solution}`)
+console.log(`
+${problem}
+part 1: ${solutionPart1}
+part 2: ${solutionPart2}
+`)
