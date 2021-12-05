@@ -1,4 +1,3 @@
-// count the number of times a depth measurement increases from the previous measurement
 const { parse } = require('../../utils')
 
 function multiplyPos(positionAlgo) {
