@@ -3,17 +3,25 @@ const { parse } = require('../../utils')
 function calculatePowerConsumption(input) {
   const { gamma, epsilon } = getRates(parse(input))
 
-  return gamma * epsilon
+  return parseInt(gamma, 2) * parseInt(epsilon, 2)
 }
 
-function getRates(binaries) {
-  const size = binaries[0].length
+function calculateLifeSupportRating(input) {
+  const binaries = parse(input)
+  const oxygen = findByBitCriteria(binaries, 'gamma')
+  const co2 = findByBitCriteria(binaries, 'epsilon')
+
+  return parseInt(oxygen, 2) * parseInt(co2, 2)
+}
+
+function getRates(binaries, start = 0, limit) {
+  const size = limit ?? binaries[0].length
   const counts = Array(size).fill(0).map(() => [0, 0])
 
   for (const binary of binaries) {
-    for (let pos = 0; pos < size; pos++) {
+    for (let pos = start; pos < start + size; pos++) {
       const val = binary[pos]
-      counts[pos][val]++
+      counts[pos - start][val]++
     }
   }
 
@@ -24,7 +32,19 @@ function getRates(binaries) {
 
   const leastCommon = invertBinary(mostCommon)
 
-  return { gamma: parseInt(mostCommon, 2), epsilon: parseInt(leastCommon, 2) }
+  return { gamma: mostCommon, epsilon: leastCommon }
+}
+
+function findByBitCriteria(binaries, criteria, pos = 0) {
+  const limit = 1
+  const matcher = getRates(binaries, pos, limit)[criteria]
+  const binariesMatchingCriteria = binaries.filter(bin => bin[pos] === matcher)
+
+  if (binariesMatchingCriteria.length <= 1)
+    return binariesMatchingCriteria[0]
+
+  pos++
+  return findByBitCriteria(binariesMatchingCriteria, criteria, pos)
 }
 
 function invertBinary(binary) {
@@ -36,12 +56,14 @@ function invertBinary(binary) {
 }
 
 const part1 = calculatePowerConsumption
-const part2 = calculatePowerConsumption
+const part2 = calculateLifeSupportRating
 
 module.exports = {
   part1,
   part2,
   getRates,
   invertBinary,
+  findByBitCriteria,
   calculatePowerConsumption,
+  calculateLifeSupportRating,
 }
