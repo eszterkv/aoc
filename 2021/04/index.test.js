@@ -83,5 +83,7 @@ describe('Board', () => {
 
   test('findScore', () => {
     expect(findScore(input)).toBe(4512)
+
+    expect(findScore(input, { reverse: true })).toBe(1924)
   })
 })

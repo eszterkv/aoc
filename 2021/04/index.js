@@ -52,7 +52,7 @@ function parseBingoInput(input) {
   return { numbers, boards }
 }
 
-function findScore(input) {
+function findScore(input, { reverse } = {}) {
   const { numbers, boards } = parseBingoInput(input)
 
   const winner = boards.sort((a, b) => {
@@ -61,7 +61,9 @@ function findScore(input) {
     a.reset()
     b.reset()
 
-    return aSteps - bSteps
+    return reverse
+      ? bSteps - aSteps
+      : aSteps - bSteps
   })[0]
 
   winner.stepsToWin(numbers)
@@ -74,7 +76,7 @@ function sum(arr) {
 }
 
 const part1 = findScore
-const part2 = () => {}
+const part2 = input => findScore(input, { reverse: true })
 
 module.exports = {
   part1,
