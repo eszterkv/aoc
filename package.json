@@ -14,5 +14,6 @@
   "scripts": {
     "solve": "node ./solve.js",
     "test": "jest"
-  }
+  },
+  "dependencies": {}
 }
