@@ -2,6 +2,8 @@ const { parse } = require('../../utils')
 
 class Move {
   constructor(input) {
+    this.input = input
+
     if (['A', 'X'].includes(input)) {
       this.type = 'rock'
       this.value = 1
@@ -26,6 +28,28 @@ class Move {
     if (opponent.value < this.value)
       return 6
   }
+
+  findMove(result) {
+    let move
+
+    if (result === 'Y') move = this.input
+    if (result === 'X') move = this.findLosingMove(result)
+    if (result === 'Z') move = this.findWinningMove(result)
+
+    return new Move(move)
+  }
+
+  findLosingMove() {
+    if (this.type === 'rock') return 'C'
+    if (this.type === 'paper') return 'A'
+    if (this.type === 'scissors') return 'B'
+  }
+
+  findWinningMove() {
+    if (this.type === 'rock') return 'B'
+    if (this.type === 'paper') return 'C'
+    if (this.type === 'scissors') return 'A'
+  }
 }
 
 const getScore = (opponent, move) => move.vs(opponent) + move.value
@@ -34,11 +58,16 @@ const part1 = input => {
   const rounds = parse(input)
     .map(round => round.split(' ').map(move => new Move(move)))
 
-  return rounds.reduce((score, [opponent, move]) =>
-    score + getScore(opponent, move), 0)
+  return rounds.reduce((score, [opponent, result]) =>
+    score + getScore(opponent, result), 0)
 }
 
-const part2 = () => {}
+const part2 = input => {
+  const rounds = parse(input).map(round => [new Move(round[0]), round[2]])
+
+  return rounds.reduce((score, [opponent, move]) =>
+    score + getScore(opponent, opponent.findMove(move)), 0)
+}
 
 module.exports = {
   part1,

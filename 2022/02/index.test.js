@@ -17,8 +17,8 @@ test('part 1', () => {
   expect(part1(input)).toBe(15)
 })
 
-test.skip('part 2', () => {
-  //expect(part2(input)).toBe(45000)
+test('part 2', () => {
+  expect(part2(input)).toBe(12)
 })
 
 test('Move', () => {
@@ -36,6 +36,13 @@ test('Move', () => {
   expect(X.vs(A)).toBe(3)
   expect(X.vs(B)).toBe(0)
   expect(X.vs(C)).toBe(6)
+
+  expect(A.findMove('Y').type).toBe('rock')
+  expect(B.findMove('X').type).toBe('rock')
+  expect(C.findMove('Z').type).toBe('rock')
+
+  expect(A.findLosingMove()).toBe('C')
+  expect(A.findWinningMove()).toBe('B')
 })
 
 test('getScore', () => {
