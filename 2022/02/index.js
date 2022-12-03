@@ -1,5 +1,16 @@
 const { parse } = require('../../utils')
 
+const score = (opp, move) => {
+  move = move.charCodeAt() - 87
+  opp = opp.charCodeAt() - 64
+  if (opp === move) return 3
+  if (move - opp === -2 || move > opp) return 6
+  return 0
+}
+
+const part1 = input => parse(input).map(r => r.split(' ')).reduce((acc, [opp, move]) =>
+  acc + score(opp, move) + move.charCodeAt() - 87, 0)
+
 class Move {
   constructor(input) {
     this.input = input
@@ -54,31 +65,12 @@ class Move {
 
 const getScore = (opponent, move) => move.vs(opponent) + move.value
 
-const part1 = input => {
-  const rounds = parse(input)
-    .map(round => round.split(' ').map(move => new Move(move)))
-
-  return rounds.reduce((score, [opponent, result]) =>
-    score + getScore(opponent, result), 0)
-}
-
 const part2 = input => {
   const rounds = parse(input).map(round => [new Move(round[0]), round[2]])
 
   return rounds.reduce((score, [opponent, move]) =>
     score + getScore(opponent, opponent.findMove(move)), 0)
 }
-
-const score = (opp, move) => {
-  move = move.charCodeAt() - 87
-  opp = opp.charCodeAt() - 64
-  if (opp === move) return 3
-  if (move - opp === -2 || move > opp) return 6
-  return 0
-}
-
-const golf1 = input => parse(input).map(r => r.split(' ')).reduce((acc, [opp, move]) =>
-  acc + score(opp, move) + move.charCodeAt() - 87, 0)
 
 module.exports = {
   part1,
