@@ -69,6 +69,17 @@ const part2 = input => {
     score + getScore(opponent, opponent.findMove(move)), 0)
 }
 
+const score = (opp, move) => {
+  move = move.charCodeAt() - 87
+  opp = opp.charCodeAt() - 64
+  if (opp === move) return 3
+  if (move - opp === -2 || move > opp) return 6
+  return 0
+}
+
+const golf1 = input => parse(input).map(r => r.split(' ')).reduce((acc, [opp, move]) =>
+  acc + score(opp, move) + move.charCodeAt() - 87, 0)
+
 module.exports = {
   part1,
   part2,
