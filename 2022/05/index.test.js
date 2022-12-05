@@ -16,6 +16,6 @@ test('part 1', () => {
   expect(part1(input)).toBe('CMZ')
 })
 
-test.skip('part 2', () => {
-  expect(part2(input)).toBe(4)
+test('part 2', () => {
+  expect(part2(input)).toBe('MCD')
 })
