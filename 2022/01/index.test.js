@@ -1,4 +1,4 @@
-import { part1, part2 } from '.'
+import { part1, part2, golf } from '.'
 
 const input = `
 1000
@@ -23,4 +23,9 @@ test('part 1: find the calories carried by the elf with the most calories', () =
 
 test('part 2: find the calories carried by the top 3 elves', () => {
   expect(part2(input)).toBe(45000)
+})
+
+test('golf part 1', () => {
+  expect(golf(input)).toBe(24000)
+  expect(golf(input, 3)).toBe(45000)
 })
