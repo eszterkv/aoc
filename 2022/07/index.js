@@ -13,7 +13,7 @@ class Node {
   }
 }
 
-const part1 = input => {
+const createNodes = input => {
   const lines = parse(input)
   const root = new Node('/')
   const nodes = new Set()
@@ -35,20 +35,25 @@ const part1 = input => {
 
     if (!(currentNode in nodes)) nodes.add(currentNode)
   })
+  return { nodes, root }
+}
 
-  const sumFiles = currentNode => {
-    let val = currentNode.val
-    if (currentNode.val > 100_000) return 0
+const part1 = input => {
+  const { nodes } = createNodes(input)
 
-    if (currentNode.children.length > 0)
-      return val + sum(currentNode.children.map(sumFiles))
+  const sumFiles = ({ val, children }) => {
+    if (val > 100_000)
+      return 0
 
-    return val
+    return children.length > 0
+      ? val + sum(children.map(sumFiles))
+      : val
   }
 
-  const childrenValid = ({ children, val }) => children.length === 0
-    ? val <= 100_000
-    : children.every(childrenValid)
+  const childrenValid = ({ children, val }) =>
+    children.length === 0
+      ? val <= 100_000
+      : children.every(childrenValid)
 
   let total = 0
 
@@ -63,7 +68,31 @@ const part1 = input => {
   return total
 }
 
-const part2 = input => {}
+const part2 = input => {
+  const { nodes, root } = createNodes(input)
+
+  const sumFiles = ({ val, children }) => {
+    if (children.length > 0)
+      return val + sum(children.map(sumFiles))
+
+    return val
+  }
+
+  let smallest = Number.MAX_SAFE_INTEGER
+
+  const diskSpace = 70000000
+  const updateSize = 30000000
+  const freeDiskSpace = diskSpace - sumFiles(root)
+  const spaceNeeded = updateSize - freeDiskSpace
+
+  nodes.forEach(node => {
+    const s = sumFiles(node)
+    if (s >= spaceNeeded && s < smallest) smallest = s
+  })
+
+  return smallest
+  // 11133322 too high
+}
 
 module.exports = {
   part1,

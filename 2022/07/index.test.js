@@ -30,6 +30,6 @@ test('part 1', () => {
   expect(part1(input)).toBe(95437)
 })
 
-test.skip('part 2', () => {
-  expect(part2(input)).toBe('')
+test('part 2', () => {
+  expect(part2(input)).toBe(24933642)
 })
