@@ -91,7 +91,6 @@ const part2 = input => {
   })
 
   return smallest
-  // 11133322 too high
 }
 
 module.exports = {
