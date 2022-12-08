@@ -2,8 +2,7 @@ const { parse } = require('../../utils')
 
 const part1 = input => {
   const grid = parse(input).map(row => row.split('').map(n => parseInt(n)))
-  const h = grid.length - 1
-  const w = grid[0].length - 1
+  const [w, h] = [grid[0].length - 1, grid.length - 1]
 
   let visibleCount = (w + h) * 2
   let seen = new Set()
@@ -12,23 +11,15 @@ const part1 = input => {
   for (let i = 1; i < h; i++) {
     let tallestLeft = grid[i][0]
     for (let j = 1; j < h; j++) {
-
       const tree = grid[i][j]
-      let treeVisible = false
 
-      if (tree > tallestLeft) {
-        tallestLeft = tree
-        treeVisible = true
-      }
-      if (tree > tallestTop[j]) {
-        tallestTop[j] = tree
-        treeVisible = true
-      }
-
-      if (treeVisible) {
+      if (tree > tallestLeft || tree > tallestTop[j]) {
         seen.add(`${i}_${j}`)
         visibleCount++
       }
+
+      if (tree > tallestLeft) tallestLeft = tree
+      if (tree > tallestTop[j]) tallestTop[j] = tree
     }
   }
 
@@ -40,19 +31,10 @@ const part1 = input => {
       const tree = grid[i][j]
       const id = `${i}_${j}`
 
-      let treeVisible = false
+      if (!seen.has(id) && (tree > tallestRight || tree > tallestBottom[j])) visibleCount++
 
-      if (tree > tallestRight) {
-        tallestRight = tree
-        treeVisible = true
-      }
-      if (tree > tallestBottom[j]) {
-        tallestBottom[j] = tree
-        treeVisible = true
-      }
-
-      if (seen.has(id)) continue
-      if (treeVisible) visibleCount++
+      if (tree > tallestRight) tallestRight = tree
+      if (tree > tallestBottom[j]) tallestBottom[j] = tree
     }
   }
 

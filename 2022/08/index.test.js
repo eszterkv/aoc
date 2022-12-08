@@ -12,6 +12,6 @@ test('part 1', () => {
   expect(part1(input)).toBe(21)
 })
 
-test.skip('part 2', () => {
-  expect(part2(input)).toBe('')
+test('part 2', () => {
+  expect(part2(input)).toBe(8)
 })
