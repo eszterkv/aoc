@@ -42,6 +42,42 @@ const part1 = input => {
 }
 
 const part2 = input => {
+  const grid = parse(input).map(row => row.split('').map(n => parseInt(n)))
+  const [w, h] = [grid[0].length, grid.length]
+
+  let maxScore = 0
+
+  for (let i = 0; i < h; i++) {
+    for (let j = 0; j < w; j++) {
+      const tree = grid[i][j]
+      let [up, left, down, right] = [0, 0, 0, 0]
+
+      for (let x = j - 1; x > -1; x--) {
+        left++
+        if (grid[i][x] >= tree) break
+      }
+
+      for (let x = j + 1; x < w; x++) {
+        right++
+        if (grid[i][x] >= tree) break
+      }
+
+      for (let y = i - 1; y > -1; y--) {
+        up++
+        if (grid[y][j] >= tree) break
+      }
+
+      for (let y = i + 1; y < h; y++) {
+        down++
+        if (grid[y][j] >= tree) break
+      }
+
+      const score = up * left * down * right
+      if (score > maxScore) maxScore = score
+    }
+  }
+
+  return maxScore
 }
 
 module.exports = {
